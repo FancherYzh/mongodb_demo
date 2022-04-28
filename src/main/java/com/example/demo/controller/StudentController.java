@@ -58,6 +58,7 @@ public class StudentController {
     public Result queryAllStudent(){
         List<Student> reList = studentOperationService.findAll();
         log.info("查询所有学生成功");
+        
         return new Result(RetCode.SUCCESS.getCode(), reList);
     }
 
