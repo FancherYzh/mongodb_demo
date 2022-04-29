@@ -16,9 +16,9 @@ public class Result<T> implements Serializable {
 
     private T data;
 
-    private long pageNum;
+    private String pageNum;
 
-    private long pageSize;
+    private String pageSize;
 
     private long total;
 
@@ -27,7 +27,7 @@ public class Result<T> implements Serializable {
         this.data = data;
     }
 
-    public Result(String retCode, T data, long pageNum, long pageSize, long total) {
+    public Result(String retCode, T data, String pageNum, String pageSize, long total) {
         this.retCode = retCode;
         this.data = data;
         this.pageNum = pageNum;

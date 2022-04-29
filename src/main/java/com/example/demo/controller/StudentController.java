@@ -3,6 +3,7 @@ package com.example.demo.controller;
 import com.example.demo.constant.RetCode;
 import com.example.demo.model.pojo.Student;
 import com.example.demo.model.vo.Result;
+import com.example.demo.model.vo.StudentQueryDto;
 import com.example.demo.service.StudentOperationService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -70,8 +71,17 @@ public class StudentController {
      *      实现基本的分页展示信息的内容
      */
     @PostMapping("/queryPage")
-    public Result queryStudentOnPage(){
-        return null;
+    public Result queryStudentOnPage(StudentQueryDto queryDto){
+        Long studentNums = studentOperationService.countStudentNums(queryDto);
+        if (studentNums <= 0L) {
+            return new Result(RetCode.NULL_STUDENT.getCode(), new Object());
+        }
+        List<Student> reList = studentOperationService.queryStudentOnPage(queryDto);
+        return new Result(RetCode.SUCCESS.getCode(),
+                            reList,
+                            queryDto.getPageNum(),
+                            queryDto.getPageSize(),
+                            studentNums);
     }
 
 

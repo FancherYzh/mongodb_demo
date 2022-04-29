@@ -1,6 +1,8 @@
 package com.example.demo.service.impl;
 
+import com.example.demo.constant.StudentBusinessConstant;
 import com.example.demo.model.pojo.Student;
+import com.example.demo.model.vo.StudentQueryDto;
 import com.example.demo.service.StudentOperationService;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -10,9 +12,12 @@ import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.data.mongodb.core.query.Update;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
+import org.springframework.util.StringUtils;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.UUID;
 import java.util.regex.Pattern;
 
@@ -52,10 +57,40 @@ public class StudentOperationServiceImpl implements StudentOperationService {
         }
     }
 
+    @Override
+    public Long countStudentNums(StudentQueryDto queryDto) {
+        if (!dealWithDto(queryDto)) {
+            return 0L;
+        }
+        Long nums = mongoTemplate.count(new Query(), Student.class);
+        return nums;
+    }
 
+    @Override
+    public List<Student> queryStudentOnPage(StudentQueryDto queryDto) {
+        if (!dealWithDto(queryDto)) {
+            return new ArrayList<>();
+        }
+        Query query = new Query();
+        query.with(Sort.by("timer").descending());
+        query.skip((Integer.parseInt(queryDto.getPageNum()) - 1) * 10 )
+                .limit(Integer.parseInt(queryDto.getPageSize()));
+        List<Student> reList = mongoTemplate.find(query, Student.class);
+        return reList;
+    }
 
-
-
+    private boolean dealWithDto(StudentQueryDto queryDto) {
+        if (Objects.isNull(queryDto)) {
+            return false;
+        }
+        if (StringUtils.isEmpty(queryDto.getPageNum())) {
+            queryDto.setPageNum(StudentBusinessConstant.PAGE_NUM);
+        }
+        if (StringUtils.isEmpty(queryDto.getPageSize())) {
+            queryDto.setPageSize(StudentBusinessConstant.PAGE_SIZE);
+        }
+        return true;
+    }
 
     @Override
     public int updateStudent(Student student) {

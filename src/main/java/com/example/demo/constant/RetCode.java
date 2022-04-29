@@ -10,6 +10,8 @@ public enum RetCode {
 
     FAILURE("00000","操作失败"),
 
+    NULL_STUDENT("00020","需要查询的学生为空"),
+
     BLANK_STUDENT_NAME("00010", "学生名称不能为空");
 
 
