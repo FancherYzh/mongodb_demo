@@ -63,12 +63,10 @@ public class StudentController {
         return new Result(RetCode.SUCCESS.getCode(), reList);
     }
 
-
     /**
-     * todo:
-     * 查询分页查询的接口
-     * 要求：
-     *      实现基本的分页展示信息的内容
+     * 分页查询接口
+     * @param queryDto
+     * @return
      */
     @PostMapping("/queryPage")
     public Result queryStudentOnPage(StudentQueryDto queryDto){
